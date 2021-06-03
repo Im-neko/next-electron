@@ -1,11 +1,10 @@
 // Native
 import { join } from 'path'
-import { format } from 'url'
 
 // Packages
 import { BrowserWindow, app, ipcMain, IpcMainEvent } from 'electron'
-import isDev from 'electron-is-dev'
 import prepareNext from 'electron-next'
+import { nextStart } from 'next/dist/cli/next-start'
 
 // Prepare the renderer once the app is ready
 app.on('ready', async () => {
@@ -21,13 +20,11 @@ app.on('ready', async () => {
     },
   })
 
-  const url = isDev
-    ? 'http://localhost:8000/'
-    : format({
-        pathname: join(__dirname, '../renderer/out/index.html'),
-        protocol: 'file:',
-        slashes: true,
-      })
+  // next appのあるディレクトリ
+  nextStart(['../next-typescript'])
+
+  // デフォルトのnextの起動ポート
+  const url = 'http://localhost:3000/'
 
   mainWindow.loadURL(url)
 })
